@@ -28,6 +28,11 @@ public class VerticalLayout extends com.vaadin.ui.VerticalLayout {
 
     private static final long serialVersionUID = -7919090034659433565L;
 
+    {
+        setSpacing(false);
+        setMargin(false);
+    }
+
     public VerticalLayout() {
     }
 

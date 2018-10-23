@@ -30,6 +30,11 @@ public class HorizontalLayout extends com.vaadin.ui.HorizontalLayout {
 
     private static final long serialVersionUID = -4010234036799029437L;
 
+    {
+        setSpacing(false);
+        setMargin(false);
+    }
+
     public HorizontalLayout() {
     }
 

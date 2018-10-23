@@ -22,6 +22,11 @@ package io.qfast.vaadin.ui;
 public class FormLayout extends com.vaadin.ui.FormLayout {
     private static final long serialVersionUID = -3248339171457899795L;
 
+    {
+        setSpacing(false);
+        setMargin(false);
+    }
+
     public FormLayout() {
     }
 

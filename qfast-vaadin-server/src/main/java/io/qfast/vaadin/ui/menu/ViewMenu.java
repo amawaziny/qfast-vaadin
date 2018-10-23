@@ -16,9 +16,6 @@
 
 package io.qfast.vaadin.ui.menu;
 
-import io.qfast.vaadin.ui.Button;
-import io.qfast.vaadin.ui.Label;
-import io.qfast.vaadin.ui.VerticalLayout;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ThemeResource;
@@ -26,15 +23,14 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.UI;
-import io.qfast.vaadin.ui.Constants;
+import io.qfast.vaadin.ui.Button;
+import io.qfast.vaadin.ui.Label;
+import io.qfast.vaadin.ui.VerticalLayout;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import static com.vaadin.icons.VaadinIcons.LIST;
@@ -57,8 +53,6 @@ public class ViewMenu extends CssLayout {
 
     private static final long serialVersionUID = 5843646442790370361L;
 
-    private static final String MENU_KEY = "io.qfast.menu.main";
-
     private final CssLayout menu = new CssLayout();
     private final Label header = new Label().withStyle(LABEL_H4, LABEL_NO_MARGIN).withWidthUndefined();
     private final VerticalLayout top = new VerticalLayout().withSpacing().withFullWidth();
@@ -68,7 +62,7 @@ public class ViewMenu extends CssLayout {
 
     private List<ViewMenuItem> viewMenuItems;
 
-    public void init(Component userMenu) {
+    public void init(Component userMenu, String mainCaption, String mainView, int codepoint) {
         setPrimaryStyleName(MENU_ROOT);
 
         menu.setId("app-menu");
@@ -97,7 +91,7 @@ public class ViewMenu extends CssLayout {
             menu.addComponent(userMenu);
         }
 
-        createMenuItems();
+        createMenuItems(mainCaption, mainView, codepoint);
 
         addAttachListener(event -> {
             Navigator navigator = UI.getCurrent().getNavigator();
@@ -118,14 +112,14 @@ public class ViewMenu extends CssLayout {
         return viewIds != null && viewIds.contains(viewId);
     }
 
-    private void createMenuItems() {
+    private void createMenuItems(String mainCaption, String mainView, int codepoint) {
         final CssLayout menuItemsLayout = new CssLayout();
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
         menu.addComponent(menuItemsLayout);
 
-        Button mainBtn = getButtonFor(getCaption(MENU_KEY), "main", LIST.getCodepoint(), null);
-        viewIdToButton.put("main", mainBtn);
-        viewIds.add("main");
+        Button mainBtn = getButtonFor(mainCaption, mainView, codepoint, null);
+        viewIdToButton.put(mainView, mainBtn);
+        viewIds.add(mainView);
         menuItemsLayout.addComponent(mainBtn);
 
         List<ViewMenuItem> enabledViewMenuItems =
@@ -133,9 +127,9 @@ public class ViewMenu extends CssLayout {
         enabledViewMenuItems.forEach(item -> {
             Label subTitle;
             if (isNULL(item.getBadge())) {
-                subTitle = new Label(getCaption(item.getCaption()));
+                subTitle = new Label(item.getCaption());
             } else {
-                subTitle = new Label(getCaption(item.getCaption()) + getBadge(item.getBadge()), HTML);
+                subTitle = new Label(item.getCaption() + getBadge(item.getBadge()), HTML);
             }
             subTitle.addStyleName(MENU_SUBTITLE);
             subTitle.addStyleName(LABEL_H4);
@@ -147,7 +141,7 @@ public class ViewMenu extends CssLayout {
                     viewIds.add(subItem.getViewId());
                     if (subItem.isEnabled()) {
                         Button button =
-                                getButtonFor(getCaption(subItem.getCaption()), subItem.getViewId(), subItem.getCodePoint(),
+                                getButtonFor(subItem.getCaption(), subItem.getViewId(), subItem.getCodePoint(),
                                         subItem.getBadge());
                         viewIdToButton.put(subItem.getViewId(), button);
                         menuItemsLayout.addComponent(button);
@@ -210,17 +204,7 @@ public class ViewMenu extends CssLayout {
         if (button != null) {
             emphasisAsSelected(button);
         }
-        getUI().getNavigator().navigateTo(viewId);
-    }
-
-    private String getCaption(String key, Object... params) {
-        UI ui = getUI();
-        Locale locale = ui != null ? ui.getLocale() : Locale.US;
-        return MessageFormat.format(getCaption(key, (locale == null) ? Locale.US : locale), params);
-    }
-
-    private String getCaption(String key, Locale locale) {
-        return ResourceBundle.getBundle(Constants.BASE_NAME, locale).getString(key);
+        UI.getCurrent().getNavigator().navigateTo(viewId);
     }
 
     private boolean isNULL(Object text) {
