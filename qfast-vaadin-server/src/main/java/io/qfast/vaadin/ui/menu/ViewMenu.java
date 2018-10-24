@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.vaadin.icons.VaadinIcons.LIST;
+import static com.vaadin.icons.VaadinIcons.NEWSPAPER;
 import static com.vaadin.shared.ui.ContentMode.HTML;
 import static com.vaadin.ui.Alignment.TOP_CENTER;
 import static com.vaadin.ui.themes.ValoTheme.BUTTON_ICON_ONLY;
@@ -60,9 +61,9 @@ public class ViewMenu extends CssLayout {
     private Button selectedButton;
     private Set<String> viewIds = new HashSet<>();
 
-    private List<ViewMenuItem> viewMenuItems;
+    private Set<ViewMenuItem> viewMenuItems;
 
-    public void init(Component userMenu, String mainCaption, String mainView, int codepoint) {
+    public void init(Component userMenu, String mainCaption, String mainView, String icon) {
         setPrimaryStyleName(MENU_ROOT);
 
         menu.setId("app-menu");
@@ -91,7 +92,7 @@ public class ViewMenu extends CssLayout {
             menu.addComponent(userMenu);
         }
 
-        createMenuItems(mainCaption, mainView, codepoint);
+        createMenuItems(mainCaption, mainView, icon);
 
         addAttachListener(event -> {
             Navigator navigator = UI.getCurrent().getNavigator();
@@ -112,12 +113,12 @@ public class ViewMenu extends CssLayout {
         return viewIds != null && viewIds.contains(viewId);
     }
 
-    private void createMenuItems(String mainCaption, String mainView, int codepoint) {
+    private void createMenuItems(String mainCaption, String mainView, String icon) {
         final CssLayout menuItemsLayout = new CssLayout();
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
         menu.addComponent(menuItemsLayout);
 
-        Button mainBtn = getButtonFor(mainCaption, mainView, codepoint, null);
+        Button mainBtn = getButtonFor(mainCaption, mainView, icon, null);
         viewIdToButton.put(mainView, mainBtn);
         viewIds.add(mainView);
         menuItemsLayout.addComponent(mainBtn);
@@ -141,7 +142,7 @@ public class ViewMenu extends CssLayout {
                     viewIds.add(subItem.getViewId());
                     if (subItem.isEnabled()) {
                         Button button =
-                                getButtonFor(subItem.getCaption(), subItem.getViewId(), subItem.getCodePoint(),
+                                getButtonFor(subItem.getCaption(), subItem.getViewId(), subItem.getIcon(),
                                         subItem.getBadge());
                         viewIdToButton.put(subItem.getViewId(), button);
                         menuItemsLayout.addComponent(button);
@@ -151,11 +152,11 @@ public class ViewMenu extends CssLayout {
         });
     }
 
-    public List<ViewMenuItem> getViewMenuItems() {
+    public Set<ViewMenuItem> getViewMenuItems() {
         return viewMenuItems;
     }
 
-    public void setViewMenuItems(List<ViewMenuItem> viewMenuItems) {
+    public void setViewMenuItems(Set<ViewMenuItem> viewMenuItems) {
         this.viewMenuItems = viewMenuItems;
     }
 
@@ -163,7 +164,7 @@ public class ViewMenu extends CssLayout {
         return "<span class='valo-menu-badge'>" + badge + "</span>";
     }
 
-    private Button getButtonFor(String caption, String viewId, int codePoint, String badge) {
+    private Button getButtonFor(String caption, String viewId, String icon, String badge) {
         Button button;
         if (isNULL(badge)) {
             button = new Button(caption, e -> navigateTo(viewId));
@@ -172,18 +173,9 @@ public class ViewMenu extends CssLayout {
             button.setCaptionAsHtml(true);
         }
         button.setPrimaryStyleName(MENU_ITEM);
-        button.setIcon(fromCodepoint(codePoint));
+        button.setIcon(icon == null ? NEWSPAPER : VaadinIcons.valueOf(icon));
         MenuButton.extend(button);
         return button;
-    }
-
-    private static VaadinIcons fromCodepoint(final int codepoint) {
-        for (VaadinIcons f : VaadinIcons.values()) {
-            if (f.getCodepoint() == codepoint) {
-                return f;
-            }
-        }
-        return VaadinIcons.NEWSPAPER;
     }
 
     private void emphasisAsSelected(Button button) {

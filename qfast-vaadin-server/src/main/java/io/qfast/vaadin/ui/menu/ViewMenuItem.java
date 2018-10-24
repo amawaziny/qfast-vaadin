@@ -17,7 +17,8 @@
 package io.qfast.vaadin.ui.menu;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Mawaziny
@@ -26,22 +27,31 @@ public class ViewMenuItem implements Serializable {
 
     private static final long serialVersionUID = 8395317133665342755L;
 
-    private int codePoint;
+    private int id;
+    private String icon;
     private String caption;
     private String badge;
     private String viewId;
     private boolean enabled = true;
-    private List<ViewMenuItem> viewMenuItems;
+    private Set<ViewMenuItem> viewMenuItems;
 
     public ViewMenuItem() {
     }
 
-    public int getCodePoint() {
-        return codePoint;
+    public int getId() {
+        return id;
     }
 
-    public void setCodePoint(int codePoint) {
-        this.codePoint = codePoint;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getCaption() {
@@ -76,11 +86,24 @@ public class ViewMenuItem implements Serializable {
         this.enabled = enabled;
     }
 
-    public List<ViewMenuItem> getViewMenuItems() {
+    public Set<ViewMenuItem> getViewMenuItems() {
         return viewMenuItems;
     }
 
-    public void setViewMenuItems(List<ViewMenuItem> viewMenuItems) {
+    public void setViewMenuItems(Set<ViewMenuItem> viewMenuItems) {
         this.viewMenuItems = viewMenuItems;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ViewMenuItem)) return false;
+        ViewMenuItem that = (ViewMenuItem) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
