@@ -16,7 +16,6 @@
 
 package io.qfast.vaadin.ui.upload.image;
 
-import io.qfast.vaadin.ui.ProfileImage;
 import com.vaadin.server.StreamResource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.HorizontalLayout;
@@ -27,6 +26,7 @@ import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.FinishedEvent;
 import com.vaadin.ui.Upload.FinishedListener;
 import com.vaadin.ui.VerticalLayout;
+import io.qfast.vaadin.ui.ProfileImage;
 
 import java.io.InputStream;
 
@@ -149,7 +149,7 @@ public class UploadImage extends VerticalLayout implements FinishedListener {
 
     public void setImageSource(String imageSource) {
         if (imageSource != null) {
-            image.setSource(new StreamResource(() -> new ProfileImage(imageSource, true).getStream(),
+            image.setSource(new StreamResource(() -> new ProfileImage(imageSource).getStream(),
                     "profile_image" + receiver.getExtension(imageSource)));
             image.setWidth(imageWidth);
             image.setHeight(imageHeight);

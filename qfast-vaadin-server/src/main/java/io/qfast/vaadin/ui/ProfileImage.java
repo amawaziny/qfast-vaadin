@@ -40,10 +40,24 @@ public class ProfileImage implements StreamSource {
 
     private final String data;
     private final boolean base64;
+    private String forground;
+    private String background;
+
+    public ProfileImage(String data) {
+        this.data = data;
+        this.base64 = true;
+    }
 
     public ProfileImage(String data, boolean base64) {
         this.data = data;
         this.base64 = base64;
+    }
+
+    public ProfileImage(String data, String foreground, String background) {
+        this.data = data;
+        this.base64 = false;
+        this.forground = foreground;
+        this.background = background;
     }
 
     public InputStream getStream() {
@@ -57,9 +71,9 @@ public class ProfileImage implements StreamSource {
                 BufferedImage image = new BufferedImage(80, 75, TYPE_INT_RGB);
 
                 Graphics drawable = image.getGraphics();
-                drawable.setColor(Color.decode("#1780F2"));
+                drawable.setColor(Color.decode(forground));
                 drawable.fillRect(0, 0, 80, 75);
-                drawable.setColor(Color.decode("#F5B00D"));
+                drawable.setColor(Color.decode(background));
 
                 Font font = new Font(drawable.getFont().getName(), Font.PLAIN, 21);
                 drawable.setFont(font);
