@@ -15,15 +15,17 @@
  */
 package io.qfast.vaadin.ui;
 
-import io.qfast.vaadin.ui.VerticalLayout.VerticalSpacedLayout;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
+import io.qfast.vaadin.ui.VerticalLayout.VerticalSpacedLayout;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import static com.vaadin.shared.ui.ContentMode.HTML;
+import static com.vaadin.ui.Alignment.BOTTOM_LEFT;
 import static com.vaadin.ui.Alignment.BOTTOM_RIGHT;
 
 /**
@@ -33,16 +35,16 @@ public class ConfirmDialog extends Window {
 
     private static final long serialVersionUID = 3291658480588693778L;
 
-    private final Button confirm = new PrimaryButton("Confirmed");
-    private final Button cancel = new Button("Cancel");
+    private final Button confirm;
+    private final Button cancel;
     private boolean confirmed;
 
-    private ConfirmDialog(String title, String message, Listener listener) {
-        this(title, message);
+    public ConfirmDialog(String title, String message, String confirmCaption, String cancelCaption, Locale locale, Listener listener) {
+        this(title, message, confirmCaption, cancelCaption, locale);
         addListener(listener);
     }
 
-    private ConfirmDialog(String title, String messageText) {
+    public ConfirmDialog(String title, String messageText, String confirmCaption, String cancelCaption, Locale locale) {
         setClosable(false);
         setDraggable(false);
         setResizable(false);
@@ -52,25 +54,28 @@ public class ConfirmDialog extends Window {
         setWidth(300, Unit.PIXELS);
         setHeight(225, Unit.PIXELS);
 
+        confirm = new PrimaryButton(confirmCaption);
+        cancel = new Button(cancelCaption);
+
         VerticalLayout content = new VerticalSpacedLayout().withSizeFull();
 
-        Label message;
-        if (messageText != null && !messageText.isEmpty()) {
-            messageText = messageText.replaceAll("\\r?\\n", "<br />");
-            message = new Label(messageText, HTML);
-        } else {
-            message = new Label("Are You Sure ?");
-        }
+        messageText = messageText.replaceAll("\\r?\\n", "<br />");
+        Label message = new Label(messageText, HTML);
         content.addComponent(message);
 
         HorizontalLayout buttons = new HorizontalLayout(confirm, cancel).withSpacing();
-        content.addComponent(buttons, BOTTOM_RIGHT);
+        if (locale.getLanguage().equalsIgnoreCase("ar")) {
+            content.addComponent(buttons, BOTTOM_LEFT);
+        } else {
+            content.addComponent(buttons, BOTTOM_RIGHT);
+        }
 
         setContent(content);
     }
 
     public static void show(Listener listener) {
-        ConfirmDialog dialog = new ConfirmDialog("Please confirm...", "Are you sure ?", listener);
+        ConfirmDialog dialog = new ConfirmDialog("Please confirm...", "Are you sure ?",
+                "Confirmed", "Cancel", Locale.ENGLISH, listener);
         UI.getCurrent().addWindow(dialog);
     }
 
@@ -85,7 +90,6 @@ public class ConfirmDialog extends Window {
     private void addListener(final Listener listener) {
         ClickListener clickListener = e -> {
             if (isEnabled()) {
-                setEnabled(false);
                 setConfirmed(e.getButton() == confirm);
                 listener.onClose(this);
                 close();

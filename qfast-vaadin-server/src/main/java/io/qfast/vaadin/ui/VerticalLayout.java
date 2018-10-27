@@ -55,7 +55,7 @@ public class VerticalLayout extends com.vaadin.ui.VerticalLayout {
         return this;
     }
 
-    public VerticalLayout withFullWidth() {
+    public VerticalLayout withWidthFull() {
         setWidth(100, PERCENTAGE);
         return this;
     }

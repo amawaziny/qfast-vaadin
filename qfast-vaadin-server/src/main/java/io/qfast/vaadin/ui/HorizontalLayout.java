@@ -61,7 +61,7 @@ public class HorizontalLayout extends com.vaadin.ui.HorizontalLayout {
         return this;
     }
 
-    public HorizontalLayout withFullWidth() {
+    public HorizontalLayout withWidthFull() {
         setWidth(100, PERCENTAGE);
         return this;
     }

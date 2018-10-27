@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Sphere-Consulting
+ * Copyright (c) 2018 QFast.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,38 +16,32 @@
 
 package io.qfast.vaadin.ui;
 
+import java.util.Collection;
+
 import static com.vaadin.server.Sizeable.Unit.PERCENTAGE;
 
 /**
  * @author Mawaziny
  */
-public class FormLayout extends com.vaadin.ui.FormLayout {
-    private static final long serialVersionUID = -3248339171457899795L;
+public class Grid<T> extends com.vaadin.ui.Grid<T> {
+    private static final long serialVersionUID = 3418354522368192828L;
 
-    {
-        setSpacing(false);
-        setMargin(false);
+    public Grid(Collection<T> items) {
+        super("", items);
     }
 
-    public FormLayout() {
-    }
-
-    public FormLayout withMargin() {
-        setMargin(true);
-        return this;
-    }
-
-    public FormLayout withSizeFull() {
+    public Grid<T> withSizeFull() {
         setSizeFull();
         return this;
     }
 
-    public FormLayout withStyleName(String styleName) {
-        addStyleName(styleName);
+    public Grid<T> withColumnOrder(String... columns) {
+        setColumns(columns);
+        setColumnOrder(columns);
         return this;
     }
 
-    public FormLayout withWidthFull() {
+    public Grid<T> withWidthFull() {
         setWidth(100, PERCENTAGE);
         return this;
     }

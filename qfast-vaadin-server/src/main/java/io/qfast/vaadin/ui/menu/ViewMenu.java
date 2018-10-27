@@ -56,7 +56,7 @@ public class ViewMenu extends CssLayout {
 
     private final CssLayout menu = new CssLayout();
     private final Label header = new Label().withStyle(LABEL_H4, LABEL_NO_MARGIN).withWidthUndefined();
-    private final VerticalLayout top = new VerticalLayout().withSpacing().withFullWidth();
+    private final VerticalLayout top = new VerticalLayout().withSpacing().withWidthFull();
     private final Map<String, Button> viewIdToButton = new HashMap<>();
     private Button selectedButton;
     private Set<String> viewIds = new HashSet<>();
