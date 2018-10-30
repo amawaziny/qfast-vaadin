@@ -49,6 +49,7 @@ import static com.vaadin.ui.themes.ValoTheme.MENU_ROOT;
 import static com.vaadin.ui.themes.ValoTheme.MENU_SUBTITLE;
 import static com.vaadin.ui.themes.ValoTheme.MENU_TITLE;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class ViewMenu extends CssLayout {
 
@@ -123,6 +124,11 @@ public class ViewMenu extends CssLayout {
         viewIds.add(mainView);
         menuItemsLayout.addComponent(mainBtn);
 
+        viewIds.addAll(viewMenuItems.stream().
+                filter(v -> !isNULL(v.getViewId())).
+                map(ViewMenuItem::getViewId).
+                collect(toSet()));
+
         List<ViewMenuItem> enabledViewMenuItems =
                 viewMenuItems.stream().filter(v -> isNULL(v.getViewId())).collect(toList());
         enabledViewMenuItems.forEach(item -> {
@@ -139,7 +145,6 @@ public class ViewMenu extends CssLayout {
 
             item.getViewMenuItems().forEach(subItem -> {
                 if (!isNULL(subItem.getViewId())) {
-                    viewIds.add(subItem.getViewId());
                     if (subItem.isEnabled()) {
                         Button button =
                                 getButtonFor(subItem.getCaption(), subItem.getViewId(), subItem.getIcon(),

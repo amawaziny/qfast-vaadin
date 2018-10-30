@@ -64,4 +64,9 @@ public class Button extends com.vaadin.ui.Button {
         setWidth("100%");
         return this;
     }
+
+    public Button withEnabled(boolean enabled) {
+        setEnabled(enabled);
+        return this;
+    }
 }
