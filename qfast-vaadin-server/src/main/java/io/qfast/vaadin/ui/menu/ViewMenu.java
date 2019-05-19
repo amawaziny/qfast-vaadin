@@ -63,6 +63,7 @@ public class ViewMenu extends CssLayout {
     private Set<String> viewIds = new HashSet<>();
 
     private Set<ViewMenuItem> viewMenuItems;
+    private CssLayout menuItemsLayout;
 
     public void init(Component userMenu, String mainCaption, String mainView, String icon) {
         setPrimaryStyleName(MENU_ROOT);
@@ -115,14 +116,11 @@ public class ViewMenu extends CssLayout {
     }
 
     private void createMenuItems(String mainCaption, String mainView, String icon) {
-        final CssLayout menuItemsLayout = new CssLayout();
+        this.menuItemsLayout = new CssLayout();
         menuItemsLayout.setPrimaryStyleName("valo-menuitems");
         menu.addComponent(menuItemsLayout);
 
-        Button mainBtn = getButtonFor(mainCaption, mainView, icon, null);
-        viewIdToButton.put(mainView, mainBtn);
-        viewIds.add(mainView);
-        menuItemsLayout.addComponent(mainBtn);
+        addMenuItem(mainCaption, mainView, icon);
 
         viewIds.addAll(viewMenuItems.stream().
                 filter(v -> !isNULL(v.getViewId())).
@@ -155,6 +153,13 @@ public class ViewMenu extends CssLayout {
                 }
             });
         });
+    }
+
+    public void addMenuItem(String caption, String viewId, String icon) {
+        Button mainBtn = getButtonFor(caption, viewId, icon, null);
+        viewIdToButton.put(viewId, mainBtn);
+        viewIds.add(viewId);
+        menuItemsLayout.addComponent(mainBtn);
     }
 
     public Set<ViewMenuItem> getViewMenuItems() {
