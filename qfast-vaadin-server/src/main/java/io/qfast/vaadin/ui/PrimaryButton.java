@@ -15,6 +15,8 @@
  */
 package io.qfast.vaadin.ui;
 
+import com.vaadin.server.Resource;
+
 import static com.vaadin.event.ShortcutAction.KeyCode.ENTER;
 import static com.vaadin.ui.themes.ValoTheme.BUTTON_PRIMARY;
 
@@ -29,5 +31,27 @@ public class PrimaryButton extends Button {
 
     public PrimaryButton(String caption) {
         super(caption);
+    }
+
+    public PrimaryButton(Resource icon) {
+        super(icon);
+    }
+
+    public PrimaryButton(String caption, Resource icon) {
+        super(caption, icon);
+    }
+
+    public PrimaryButton(String caption, Resource icon, ClickListener listener) {
+        super(caption, icon);
+        addClickListener(listener);
+    }
+
+    public PrimaryButton(String caption, ClickListener listener) {
+        super(caption, listener);
+    }
+
+    public PrimaryButton(Resource icon, ClickListener listener) {
+        this(icon);
+        addClickListener(listener);
     }
 }
